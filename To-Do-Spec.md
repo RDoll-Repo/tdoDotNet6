@@ -27,24 +27,24 @@ Response Body:
 ```
 [
     {
-        "id": GUID,
+        "id": "string",
         "taskDescription": "string",
         "createdDate": "datetime",
-        "dueDate": "datetime",
+        "dueDate": "date",
         "completed": bool
     },
     {
-        "id": GUID,
+        "id": "string":,
         "taskDescription": "string",
         "createdDate": "datetime",
-        "dueDate": "datetime",
+        "dueDate": "date",
         "completed": bool
     },
     {
-        "id": GUID,
+        "id": "string",
         "taskDescription": "string",
         "createdDate": "datetime",
-        "dueDate": "datetime",
+        "dueDate": "date",
         "completed": bool
     },
     ...
@@ -72,10 +72,10 @@ Response Body:
 ```
 
 {
-    "id": GUID,
+    "id": "string",
     "taskDescription": "string",
     "createdDate": "datetime",
-    "dueDate": "datetime",
+    "dueDate": "date",
     "completed": bool
 }
 ```
@@ -99,7 +99,7 @@ Request Body:
 ```
 {
     "taskDescription": "string",
-    "dueDate": "datetime",
+    "dueDate": "date",
     "completed": bool
 }
 ```
@@ -108,10 +108,10 @@ Response Code: 201 CREATED
 Response Body:
 ```
 {
-    "id": GUID,
+    "id": "string",
     "taskDescription": "string",
     "createdDate": "datetime",
-    "dueDate": "datetime",
+    "dueDate": "date",
     "completed": bool
 }
 ```
@@ -134,10 +134,10 @@ Failure States:
 Request Body: 
 ```
 {
-    "id": GUID,                      //inmutable
+    "id": "string",                      //inmutable
     "taskDescription": "string",
     "createdDate": "datetime",         //inmutable
-    "dueDate": "datetime",
+    "dueDate": "date",
     "completed": bool
 }
 ```
@@ -147,10 +147,10 @@ Response Body:
 
 ```
 {
-    "id": GUID,
+    "id": "string",
     "taskDescription": "string",
     "createdDate": "datetime",
-    "dueDate": "datetime",
+    "dueDate": "date",
     "completed": bool
 }
 ```
