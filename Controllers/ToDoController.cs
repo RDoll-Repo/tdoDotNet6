@@ -9,10 +9,12 @@ namespace todoDotNet6.Controllers;
 
 public class ToDoController:ControllerBase {
 
+    Repository repo = new Repository();
+
     [HttpGet("tasks")]
     public ActionResult<IEnumerable<ToDo>> Get()
     {   
-        return Ok(Repository.getAll());
+        return Ok(repo.GetAll());
     }
 
 
@@ -20,8 +22,7 @@ public class ToDoController:ControllerBase {
     [HttpGet("tasks/{id}")]
     public ActionResult<ToDo> Get(Guid id) 
     {   
-
-        return Ok(Repository.listToDo[id]);
+        return Ok(repo.GetOne(id));
     }
 
 
@@ -29,13 +30,7 @@ public class ToDoController:ControllerBase {
     [HttpPost("tasks")]
     public ActionResult<ToDo> Post([FromBody]ToDo toDo)
     {
-        var newID = Guid.NewGuid();
-        
-        toDo.ID = newID;
-
-        Repository.listToDo.Add(newID,toDo);
-
-        return Created(uri:"tasks/{id}", toDo);
+        return Created(uri:"tasks/{id}", repo.Create(toDo));
     }
 
 
@@ -43,11 +38,7 @@ public class ToDoController:ControllerBase {
     [HttpPut("tasks/{id}")]
     public ActionResult<ToDo> Put([FromBody]ToDo toDo, Guid ID) 
     {
-        Repository.listToDo[ID].TaskDescription = toDo.TaskDescription;
-        Repository.listToDo[ID].DueDate = toDo.DueDate;
-        Repository.listToDo[ID].Completed = toDo.Completed;
-
-        return Ok(Repository.listToDo[ID]);
+        return Ok(repo.Update(toDo, ID));
     }
 
 
@@ -55,8 +46,7 @@ public class ToDoController:ControllerBase {
     [HttpDelete("tasks/{id}")]
     public ActionResult<ToDo> Delete(Guid ID) 
     {
-        Repository.listToDo.Remove(ID);
-        return Ok();
+        return Ok(repo.Delete(ID));
     }
 
 }
