@@ -6,7 +6,7 @@ namespace todoDotNet6.Services;
 public interface IRepository
 {
     public static Dictionary<Guid, ToDo>? listToDo { get; set; }
-    public ToDo[] GetAll();
+    public IEnumerable<ToDo> GetAll();
     public ToDo GetOne(Guid id);
     public ToDo Create(ToDo newToDo);
     public ToDo Update(ToDo update, Guid id);
@@ -17,7 +17,7 @@ public class Repository : IRepository
 {
     public static Dictionary<Guid, ToDo> listToDo = new Dictionary<Guid, ToDo>() {};
 
-    public ToDo[] GetAll() 
+    public IEnumerable<ToDo> GetAll() 
     {
         return listToDo.Values.ToArray();
     }
