@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using todoDotNet6.models.ToDo;
+using todoDotNet6.models;
 using todoDotNet6.Services;
 
 namespace todoDotNet6.Controllers;
@@ -7,9 +7,9 @@ namespace todoDotNet6.Controllers;
 [ApiController]
 [Route("todolist")]
 
-public class ToDoController:ControllerBase {
-
-    Repository repo = new Repository();
+public class ToDoController:ControllerBase 
+{
+    private readonly Repository repo = new Repository();
 
     [HttpGet("tasks")]
     public ActionResult<IEnumerable<ToDo>> Get()
@@ -21,7 +21,13 @@ public class ToDoController:ControllerBase {
 
     [HttpGet("tasks/{id}")]
     public ActionResult<ToDo> Get(Guid id) 
-    {   
+    {          
+        ToDo single = repo.GetOne(id);
+        
+        if (single == null)
+        {
+            return NotFound();
+        }
         return Ok(repo.GetOne(id));
     }
 
@@ -46,7 +52,8 @@ public class ToDoController:ControllerBase {
     [HttpDelete("tasks/{id}")]
     public ActionResult<ToDo> Delete(Guid ID) 
     {
-        return Ok(repo.Delete(ID));
+        repo.Delete(ID);
+        return Ok();
     }
 
 }

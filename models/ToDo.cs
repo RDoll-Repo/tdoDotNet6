@@ -1,6 +1,6 @@
 using todoDotNet6.Services;
 
-namespace todoDotNet6.models.ToDo;
+namespace todoDotNet6.models;
 
     public class ToDo:IToDo
     {
