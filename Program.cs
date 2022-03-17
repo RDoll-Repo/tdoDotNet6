@@ -1,5 +1,4 @@
 using todoDotNet6.Services;
-using todoDotNet6.models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +9,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IRepository, Repository>();
-builder.Services.AddScoped<IToDo, ToDo>();
 
 var app = builder.Build();
 
