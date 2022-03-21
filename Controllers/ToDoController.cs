@@ -49,9 +49,9 @@ public class ToDoController:ControllerBase
 
 
     [HttpPut("tasks/{id}")]
-    public ActionResult<ToDo> Put([FromBody]ToDo toDo, Guid ID) 
+    public async Task<ActionResult<ToDo>> Put([FromBody]ToDo toDo, Guid ID) 
     {
-        return Ok(_repo.Update(toDo, ID));
+        return Ok(await _repo.Update(toDo, ID));
     }
 
 

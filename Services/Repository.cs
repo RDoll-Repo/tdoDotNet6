@@ -13,7 +13,7 @@ public interface IRepository
     public Task<IEnumerable<ToDo>> GetAll();
     public Task<ToDo> GetOne(Guid id);
     public Task<ToDo> Create(ToDo newToDo);
-    public ToDo Update(ToDo update, Guid id);
+    public Task<ToDo> Update(ToDo update, Guid id);
     public void Delete(Guid ID);
 }
 
@@ -46,19 +46,19 @@ public class Repository : IRepository
         return newToDo;
     }
  
-    public ToDo Update(ToDo update, Guid id)
+    public async Task<ToDo> Update(ToDo update, Guid id)
     {
         update.ID = id;
         update.DueDate = DateTime.SpecifyKind(update.DueDate, DateTimeKind.Utc);
         _dbSet.Update(update);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return update;
     }
 
-    public void Delete(Guid id)
+    public async void Delete(Guid id)
     {
         _dbSet.Remove(new ToDo{ID = id});
-        _context.SaveChanges();
+        await _context.SaveChanges();
     }
 }
