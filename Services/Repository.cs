@@ -41,8 +41,8 @@ public class Repository : IRepository
     {
         newToDo.ID = Guid.NewGuid();
         newToDo.DueDate = DateTime.SpecifyKind(newToDo.DueDate, DateTimeKind.Utc);
-        //await _dbSet.AddAsync(newToDo).IsCompleted =>
-        //_context.SaveChanges();
+        _dbSet.Add(newToDo);
+        await _context.SaveChangesAsync();
         return newToDo;
     }
  

@@ -41,9 +41,9 @@ public class ToDoController:ControllerBase
 
 
     [HttpPost("tasks")]
-    public ActionResult<ToDo> Post([FromBody]ToDo toDo)
+    public async Task<ActionResult<ToDo>> Post([FromBody]ToDo toDo)
     {
-        return Created(uri:"tasks/{id}", _repo.Create(toDo));
+        return Created(uri:"tasks/{id}", await _repo.Create(toDo));
     }
 
 
