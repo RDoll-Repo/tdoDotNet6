@@ -40,7 +40,6 @@ public class Repository : IRepository
     public ToDo Create(ToDo newToDo) 
     {
         newToDo.ID = Guid.NewGuid();
-        newToDo.DueDate = DateTime.SpecifyKind(newToDo.DueDate, DateTimeKind.Utc);
         var todo = _dbSet.Add(newToDo);
         _context.SaveChanges();
         return newToDo;
@@ -49,7 +48,6 @@ public class Repository : IRepository
     public ToDo Update(ToDo update, Guid id)
     {
         update.ID = id;
-        update.DueDate = DateTime.SpecifyKind(update.DueDate, DateTimeKind.Utc);
         _dbSet.Update(update);
         _context.SaveChanges();
 
