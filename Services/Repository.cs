@@ -29,7 +29,7 @@ public class Repository : IRepository
 
     public IEnumerable<ToDo> GetAll() 
     {
-        return _dbSet.ToArray();
+        return _dbSet;
     }
 
     public ToDo GetOne(Guid id) 
