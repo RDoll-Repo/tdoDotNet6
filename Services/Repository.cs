@@ -1,5 +1,9 @@
+using todoDotNet6.db;
 using todoDotNet6.models;
+using Microsoft.EntityFrameworkCore;
 namespace todoDotNet6.Services;
+
+
 
 // Template to have the dependencies from service container 
 // ready for the Repository. 
@@ -15,47 +19,46 @@ public interface IRepository
 
 public class Repository : IRepository 
 {
-    public static Dictionary<Guid, ToDo> listToDo = new Dictionary<Guid, ToDo>() {};
+    private readonly ApplicationContext _context;
+    public DbSet<ToDo> _dbSet => _context.Set<ToDo>();
+
+    public Repository( ApplicationContext context)
+    {
+        _context = context;
+    }
 
     public ToDo[] GetAll() 
     {
-        return listToDo.Values.ToArray();
+        return _dbSet.ToArray();
     }
 
     public ToDo GetOne(Guid id) 
     {
-        if (listToDo.ContainsKey(id))
-        {
-            return listToDo[id];
-        }
-        else
-        {
-            return null;
-        }
+        return _dbSet.Single(td => td.ID == id);
     }
 
     public ToDo Create(ToDo newToDo) 
     {
-        Guid newID  = Guid.NewGuid();
-        while (listToDo.ContainsKey(newID))
-        {
-            newID = Guid.NewGuid();
-        }
-        newToDo.ID = newID;
-        listToDo.Add(newID,newToDo);
-
+        newToDo.ID = Guid.NewGuid();
+        newToDo.DueDate = DateTime.SpecifyKind(newToDo.DueDate, DateTimeKind.Utc);
+        var todo = _dbSet.Add(newToDo);
+        _context.SaveChanges();
         return newToDo;
     }
-
+ 
     public ToDo Update(ToDo update, Guid id)
     {
-        listToDo[id] = update;
-        listToDo[id].ID = id;
-        return listToDo[id];
+        update.ID = id;
+        update.DueDate = DateTime.SpecifyKind(update.DueDate, DateTimeKind.Utc);
+        _dbSet.Update(update);
+        _context.SaveChanges();
+
+        return update;
     }
 
     public void Delete(Guid id)
     {
-        listToDo.Remove(id);
+        _dbSet.Remove(new ToDo{ID = id});
+        _context.SaveChanges();
     }
 }

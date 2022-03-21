@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using todoDotNet6.db;
 using todoDotNet6.models;
 using todoDotNet6.Services;
 
@@ -9,10 +10,12 @@ namespace todoDotNet6.Controllers;
 
 public class ToDoController:ControllerBase 
 {
+    private readonly ApplicationContext _context;
     private readonly IRepository _repo;
 
-    public ToDoController(IRepository repo)
+    public ToDoController(ApplicationContext context, IRepository repo)
     {
+        _context = context;
         _repo = repo;
     }
 

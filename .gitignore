@@ -3,3 +3,4 @@ obj/
 docker/db/data
 inflight_trace_dump/
 node_modules/
+.DS_Store
