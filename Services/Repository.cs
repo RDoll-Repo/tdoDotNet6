@@ -12,7 +12,7 @@ public interface IRepository
     public static Dictionary<Guid, ToDo>? listToDo { get; set; }
     public Task<IEnumerable<ToDo>> GetAll();
     public Task<ToDo> GetOne(Guid id);
-    public ToDo Create(ToDo newToDo);
+    public Task<ToDo> Create(ToDo newToDo);
     public ToDo Update(ToDo update, Guid id);
     public void Delete(Guid ID);
 }
@@ -37,12 +37,12 @@ public class Repository : IRepository
         return await _dbSet.FirstOrDefaultAsync(t => t.ID == id);
     }
 
-    public ToDo Create(ToDo newToDo) 
+    public async Task<ToDo> Create(ToDo newToDo) 
     {
         newToDo.ID = Guid.NewGuid();
         newToDo.DueDate = DateTime.SpecifyKind(newToDo.DueDate, DateTimeKind.Utc);
-        var todo = _dbSet.Add(newToDo);
-        _context.SaveChanges();
+        //await _dbSet.AddAsync(newToDo).IsCompleted =>
+        //_context.SaveChanges();
         return newToDo;
     }
  
