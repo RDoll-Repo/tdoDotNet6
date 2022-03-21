@@ -57,9 +57,9 @@ public class ToDoController:ControllerBase
 
 
     [HttpDelete("tasks/{id}")]
-    public ActionResult<ToDo> Delete(Guid ID) 
+    public async Task<ActionResult<ToDo>> Delete(Guid ID) 
     {
-        _repo.Delete(ID);
+        await _repo.Delete(ID);
         return Ok();
     }
 }

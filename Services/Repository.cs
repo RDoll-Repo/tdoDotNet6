@@ -14,7 +14,7 @@ public interface IRepository
     public Task<ToDo> GetOne(Guid id);
     public Task<ToDo> Create(ToDo newToDo);
     public Task<ToDo> Update(ToDo update, Guid id);
-    public void Delete(Guid ID);
+    public Task<ToDo?> Delete(Guid ID);
 }
 
 public class Repository : IRepository 
@@ -40,7 +40,6 @@ public class Repository : IRepository
     public async Task<ToDo> Create(ToDo newToDo) 
     {
         newToDo.ID = Guid.NewGuid();
-        newToDo.DueDate = DateTime.SpecifyKind(newToDo.DueDate, DateTimeKind.Utc);
         _dbSet.Add(newToDo);
         await _context.SaveChangesAsync();
         return newToDo;
@@ -49,16 +48,16 @@ public class Repository : IRepository
     public async Task<ToDo> Update(ToDo update, Guid id)
     {
         update.ID = id;
-        update.DueDate = DateTime.SpecifyKind(update.DueDate, DateTimeKind.Utc);
         _dbSet.Update(update);
         await _context.SaveChangesAsync();
 
         return update;
     }
 
-    public async void Delete(Guid id)
+    public async Task<ToDo?> Delete(Guid id)
     {
         _dbSet.Remove(new ToDo{ID = id});
-        await _context.SaveChanges();
+        await _context.SaveChangesAsync();
+        return null;
     }
 }
