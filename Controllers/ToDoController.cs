@@ -10,33 +10,32 @@ namespace todoDotNet6.Controllers;
 
 public class ToDoController:ControllerBase 
 {
-    private readonly ApplicationContext _context;
     private readonly IRepository _repo;
 
     public ToDoController(ApplicationContext context, IRepository repo)
     {
-        _context = context;
         _repo = repo;
     }
 
     [HttpGet("tasks")]
-    public ActionResult<IEnumerable<ToDo>> Get()
+    public async Task<ActionResult<IEnumerable<ToDo>>> Get()
     {   
-        return Ok(_repo.GetAll());
+        var list = await _repo.GetAll();
+        return Ok(list);
     }
 
 
 
     [HttpGet("tasks/{id}")]
-    public ActionResult<ToDo> Get(Guid id) 
+    public async Task<ActionResult<ToDo>> Get(Guid id) 
     {          
-        ToDo single = _repo.GetOne(id);
+        ToDo single = await _repo.GetOne(id);
         
         if (single == null)
         {
             return NotFound();
         }
-        return Ok(_repo.GetOne(id));
+        return Ok(single);
     }
 
 

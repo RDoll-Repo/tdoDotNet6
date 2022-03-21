@@ -10,8 +10,8 @@ namespace todoDotNet6.Services;
 public interface IRepository
 {
     public static Dictionary<Guid, ToDo>? listToDo { get; set; }
-    public ToDo[] GetAll();
-    public ToDo GetOne(Guid id);
+    public Task<IEnumerable<ToDo>> GetAll();
+    public Task<ToDo> GetOne(Guid id);
     public ToDo Create(ToDo newToDo);
     public ToDo Update(ToDo update, Guid id);
     public void Delete(Guid ID);
@@ -27,14 +27,14 @@ public class Repository : IRepository
         _context = context;
     }
 
-    public ToDo[] GetAll() 
+    public async Task<IEnumerable<ToDo>> GetAll() 
     {
-        return _dbSet.ToArray();
+        return await _dbSet.ToListAsync();
     }
 
-    public ToDo GetOne(Guid id) 
+    public async Task<ToDo> GetOne(Guid id) 
     {
-        return _dbSet.Single(td => td.ID == id);
+        return await _dbSet.FirstOrDefaultAsync(t => t.ID == id);
     }
 
     public ToDo Create(ToDo newToDo) 
