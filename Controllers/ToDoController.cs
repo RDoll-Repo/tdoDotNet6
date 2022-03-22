@@ -18,47 +18,48 @@ public class ToDoController:ControllerBase
     }
 
     [HttpGet("tasks")]
-    public ActionResult<IEnumerable<ToDo>> Get()
+    public async Task<ActionResult<IEnumerable<ToDo>>> Get()
     {   
-        return Ok(_repo.GetAll());
+        var list = await _repo.GetAll();
+        return Ok(list);
     }
 
 
 
     [HttpGet("tasks/{id}")]
-    public ActionResult<ToDo> Get(Guid id) 
+    public async Task<ActionResult<ToDo>> Get(Guid id) 
     {          
-        ToDo single = _repo.GetOne(id);
+        ToDo single = await _repo.GetOne(id);
         
         if (single == null)
         {
             return NotFound();
         }
-        return Ok(_repo.GetOne(id));
+        return Ok(single);
     }
 
 
 
     [HttpPost("tasks")]
-    public ActionResult<ToDo> Post([FromBody]ToDo toDo)
+    public async Task<ActionResult<ToDo>> Post([FromBody]ToDo toDo)
     {
-        return Created(uri:"tasks/{id}", _repo.Create(toDo));
+        return Created(uri:"tasks/{id}", await _repo.Create(toDo));
     }
 
 
 
     [HttpPut("tasks/{id}")]
-    public ActionResult<ToDo> Put([FromBody]ToDo toDo, Guid ID) 
+    public async Task<ActionResult<ToDo>> Put([FromBody]ToDo toDo, Guid ID) 
     {
-        return Ok(_repo.Update(toDo, ID));
+        return Ok(await _repo.Update(toDo, ID));
     }
 
 
 
     [HttpDelete("tasks/{id}")]
-    public ActionResult<ToDo> Delete(Guid ID) 
+    public async Task<ActionResult<ToDo>> Delete(Guid ID) 
     {
-        _repo.Delete(ID);
+        await _repo.Delete(ID);
         return Ok();
     }
 }
