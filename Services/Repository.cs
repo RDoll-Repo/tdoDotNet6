@@ -1,61 +1,62 @@
+using todoDotNet6.db;
 using todoDotNet6.models;
+using Microsoft.EntityFrameworkCore;
 namespace todoDotNet6.Services;
+
+
 
 // Template to have the dependencies from service container 
 // ready for the Repository. 
 public interface IRepository
 {
-    public static Dictionary<Guid, ToDo>? listToDo { get; set; }
-    public IEnumerable<ToDo> GetAll();
-    public ToDo GetOne(Guid id);
-    public ToDo Create(ToDo newToDo);
-    public ToDo Update(ToDo update, Guid id);
-    public void Delete(Guid ID);
+    public Task<IEnumerable<ToDo>> GetAll();
+    public Task<ToDo> GetOne(Guid id);
+    public Task<ToDo> Create(ToDo newToDo);
+    public Task<ToDo> Update(ToDo update, Guid id);
+    public Task<ToDo?> Delete(Guid ID);
 }
 
 public class Repository : IRepository 
 {
-    public static Dictionary<Guid, ToDo> listToDo = new Dictionary<Guid, ToDo>() {};
+    private readonly ApplicationContext _context;
+    public DbSet<ToDo> _dbSet => _context.Set<ToDo>();
 
-    public IEnumerable<ToDo> GetAll() 
+    public Repository( ApplicationContext context)
     {
-        return listToDo.Values.ToArray();
+        _context = context;
     }
 
-    public ToDo GetOne(Guid id) 
+    public async Task<IEnumerable<ToDo>> GetAll() 
     {
-        if (listToDo.ContainsKey(id))
-        {
-            return listToDo[id];
-        }
-        else
-        {
-            return null;
-        }
+        return await _dbSet.ToListAsync();
     }
 
-    public ToDo Create(ToDo newToDo) 
+    public async Task<ToDo> GetOne(Guid id) 
     {
-        Guid newID  = Guid.NewGuid();
-        while (listToDo.ContainsKey(newID))
-        {
-            newID = Guid.NewGuid();
-        }
-        newToDo.ID = newID;
-        listToDo.Add(newID,newToDo);
+        return await _dbSet.FirstOrDefaultAsync(t => t.ID == id);
+    }
 
+    public async Task<ToDo> Create(ToDo newToDo) 
+    {
+        newToDo.ID = Guid.NewGuid();
+        _dbSet.Add(newToDo);
+        await _context.SaveChangesAsync();
         return newToDo;
     }
-
-    public ToDo Update(ToDo update, Guid id)
+ 
+    public async Task<ToDo> Update(ToDo update, Guid id)
     {
-        listToDo[id] = update;
-        listToDo[id].ID = id;
-        return listToDo[id];
+        update.ID = id;
+        _dbSet.Update(update);
+        await _context.SaveChangesAsync();
+
+        return update;
     }
 
-    public void Delete(Guid id)
+    public async Task<ToDo?> Delete(Guid id)
     {
-        listToDo.Remove(id);
+        _dbSet.Remove(new ToDo{ID = id});
+        await _context.SaveChangesAsync();
+        return null;
     }
 }

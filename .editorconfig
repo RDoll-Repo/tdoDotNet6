@@ -1,0 +1,7 @@
+# This is needed because new C# warnings that try to warn you about possible null values after construction. This is a valid
+# .NET pattern and the warnings would pile up and make the problems window less useful. #JustMicrosoftThings
+
+root = true
+
+[*.cs]
+dotnet_diagnostic.CS8618.severity = none
