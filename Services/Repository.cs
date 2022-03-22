@@ -9,7 +9,6 @@ namespace todoDotNet6.Services;
 // ready for the Repository. 
 public interface IRepository
 {
-    public static Dictionary<Guid, ToDo>? listToDo { get; set; }
     public Task<IEnumerable<ToDo>> GetAll();
     public Task<ToDo> GetOne(Guid id);
     public Task<ToDo> Create(ToDo newToDo);
